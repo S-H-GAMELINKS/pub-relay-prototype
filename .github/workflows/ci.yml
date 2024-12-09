@@ -54,5 +54,5 @@ jobs:
 
         run: |
           bin/rails db:test:prepare
-          bin/rspec
+          bundle exec rspec
 
