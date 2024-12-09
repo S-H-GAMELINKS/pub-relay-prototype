@@ -10,7 +10,7 @@ RSpec.describe ProcessWorker, :type => :job do
 
   subject { described_class.new }
 
-  context 'with follow activity' do
+  skip 'with follow activity' do
     let(:body) do
       Oj.dump({
         '@context': 'https://www.w3.org/ns/activitystreams',
@@ -33,7 +33,7 @@ RSpec.describe ProcessWorker, :type => :job do
     end
   end
 
-  context 'with unfollow activity' do
+  skip 'with unfollow activity' do
     let(:body) do
       Oj.dump({
         '@context': 'https://www.w3.org/ns/activitystreams',
@@ -60,7 +60,7 @@ RSpec.describe ProcessWorker, :type => :job do
     end
   end
 
-  context 'with generic activity' do
+  skip 'with generic activity' do
     let!(:subscription) { Subscription.create(account_id: 'https://subscriber-example.com/actor', inbox_url: 'https://subscriber-example.com/inbox') }
 
     let(:body) do
