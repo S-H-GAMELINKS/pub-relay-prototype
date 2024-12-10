@@ -10,7 +10,7 @@ RSpec.describe ProcessWorker, :type => :job do
 
   subject { described_class.new }
 
-  skip 'with follow activity' do
+  context 'with follow activity' do
     let(:body) do
       Oj.dump({
         '@context': 'https://www.w3.org/ns/activitystreams',
@@ -26,14 +26,14 @@ RSpec.describe ProcessWorker, :type => :job do
     end
 
     it 'creates subscription' do
-      subscription = Subscription.find_by(account_id: actor['id'])
+      subscription = Subscription.find_by(domain: 'example.com')
 
       expect(subscription).to_not be_nil
       expect(subscription.inbox_url).to eq actor['inbox']
     end
   end
 
-  skip 'with unfollow activity' do
+  context 'with unfollow activity' do
     let(:body) do
       Oj.dump({
         '@context': 'https://www.w3.org/ns/activitystreams',
@@ -50,18 +50,18 @@ RSpec.describe ProcessWorker, :type => :job do
     end
 
     before do
-      Subscription.create!(account_id: actor['id'], inbox_url: actor['inbox'])
+      Subscription.create!(domain: 'example.com', inbox_url: actor['inbox'])
       subject.perform(actor, body)
     end
 
     it 'removes subscription' do
-      subscription = Subscription.find_by(account_id: actor['id'])
+      subscription = Subscription.find_by(domain: actor['id'])
       expect(subscription).to be_nil
     end
   end
 
-  skip 'with generic activity' do
-    let!(:subscription) { Subscription.create(account_id: 'https://subscriber-example.com/actor', inbox_url: 'https://subscriber-example.com/inbox') }
+  context 'with generic activity' do
+    let!(:subscription) { Subscription.create(domain: 'https://subscriber-example.com/actor', inbox_url: 'https://subscriber-example.com/inbox') }
 
     let(:body) do
       Oj.dump({
